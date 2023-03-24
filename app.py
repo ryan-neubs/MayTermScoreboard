@@ -1,27 +1,40 @@
 # app.py
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import json
 from pprint import pprint as pretty
 from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
-@app.route('/points')
-def hello():
+@app.route('/points', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        form = request.form
+        if verifypw(form["passkey"]):
+            update_points(form["class"], form["points"])
     data = get_points()
-    return render_template('points.html', points=data)
+    freshmen = data["Points"]["Freshmen"]
+    sophomore = data["Points"]["Sophomore"]
+    junior = data["Points"]["Junior"]
+    senior = data["Points"]["Senior"]
+    return render_template('points.html',
+                           freshmen=freshmen, 
+                           sophomore=sophomore,
+                           junior=junior,
+                           senior=senior)
+
+def update_points(year, amount):
+    amount = int(amount)
+    data = get_points()
+    data["Points"][year] += amount
+    with open('points.json', 'w') as data_file:
+        json.dump(data, data_file, indent=4, sort_keys=True)
 
 def get_points():
     with open('points.json') as data_file:
         data = json.load(data_file)
     return data
-
-def update_points(year, amount):
-    data = get_points()
-    data["Points"][year] += amount
-    with open('points.json', 'w') as data_file:
-        json.dump(data, data_file, indent=4, sort_keys=True)
 
 def reset_points():
     data = get_points()
@@ -30,6 +43,8 @@ def reset_points():
     with open('points.json', 'w') as data_file:
         json.dump(data, data_file, indent=4, sort_keys=True)
 
+# For whoever read this: The passkey will be stored in a .env file. It is in the gitignore template so
+# it isn't out on the repository for anyone to see. You can make the passkey whatever you want in the .env
 def verifypw(input):
     return input == os.getenv('PASSKEY')
 

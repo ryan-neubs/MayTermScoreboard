@@ -1,2 +1,13 @@
 <!DOCTYPE html>
-<h1>Point data:<br>{{points}}</h1>
+<h1>Point data</h1>
+<h3>Freshmen: {{freshmen}}</h3>
+<h3>Sophomore: {{sophomore}}</h3>
+<h3>Junior: {{junior}}</h3>
+<h3>Senior: {{senior}}</h3>
+<h4>Edit Points Here</h4>
+<form action="/points" method="POST">
+    <p>Class <input type = "text" name = "class" /></p>
+    <p>Points <input type = "text" name = "points" /></p>
+    <p>Passkey <input type = "text" name = "passkey" /></p>
+    <p><input type = "submit" value = "Edit Points" /></p>
+</form>
