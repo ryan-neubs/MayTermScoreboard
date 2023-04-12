@@ -1,0 +1,19 @@
+<h4>Edit Points Here</h4>
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+<form action="/pointedit" method="POST">
+    <p>Class <input type = "text" name = "class" /></p>
+    <p>Points <input type = "text" name = "points" /></p>
+    <p>Passkey <input type = "text" name = "passkey" /></p>
+    <p><input type = "submit" value = "Confirm Change" onclick="alert('Changes confirmed')"/></p>
+    <p><input type = "button" value = "Reset All Points" onclick="reset_points()"/></p>
+</form>
+<br>
+<form action="/" method="GET">
+    <p><input type = "submit" value = "Home" /></p>
+</form>
